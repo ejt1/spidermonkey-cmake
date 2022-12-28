@@ -48,25 +48,17 @@
 **
 **
 ***********************************************************************/
-#if defined(_NSPR_STATIC_)
-#define PR_DECL_EXPORT
-#define PR_DECL_IMPORT
-#else
-#define PR_DECL_EXPORT __declspec(dllexport)
-#define PR_DECL_IMPORT __declspec(dllimport)
-#endif
-
 #if defined(WIN32)
 
-#define PR_EXPORT(__type) extern PR_DECL_EXPORT __type
-#define PR_EXPORT_DATA(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPORT(__type) PR_DECL_IMPORT __type
-#define PR_IMPORT_DATA(__type) PR_DECL_IMPORT __type
+#define PR_EXPORT(__type) extern __declspec(dllexport) __type
+#define PR_EXPORT_DATA(__type) extern __declspec(dllexport) __type
+#define PR_IMPORT(__type) __declspec(dllimport) __type
+#define PR_IMPORT_DATA(__type) __declspec(dllimport) __type
 
-#define PR_EXTERN(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPLEMENT(__type) PR_DECL_EXPORT __type
-#define PR_EXTERN_DATA(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPLEMENT_DATA(__type) PR_DECL_EXPORT __type
+#define PR_EXTERN(__type) extern __declspec(dllexport) __type
+#define PR_IMPLEMENT(__type) __declspec(dllexport) __type
+#define PR_EXTERN_DATA(__type) extern __declspec(dllexport) __type
+#define PR_IMPLEMENT_DATA(__type) __declspec(dllexport) __type
 
 #define PR_CALLBACK
 #define PR_CALLBACK_DECL
@@ -74,15 +66,15 @@
 
 #elif defined(XP_BEOS)
 
-#define PR_EXPORT(__type) extern PR_DECL_EXPORT __type
-#define PR_EXPORT_DATA(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPORT(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPORT_DATA(__type) extern PR_DECL_EXPORT __type
+#define PR_EXPORT(__type) extern __declspec(dllexport) __type
+#define PR_EXPORT_DATA(__type) extern __declspec(dllexport) __type
+#define PR_IMPORT(__type) extern __declspec(dllexport) __type
+#define PR_IMPORT_DATA(__type) extern __declspec(dllexport) __type
 
-#define PR_EXTERN(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPLEMENT(__type) PR_DECL_EXPORT __type
-#define PR_EXTERN_DATA(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPLEMENT_DATA(__type) PR_DECL_EXPORT __type
+#define PR_EXTERN(__type) extern __declspec(dllexport) __type
+#define PR_IMPLEMENT(__type) __declspec(dllexport) __type
+#define PR_EXTERN_DATA(__type) extern __declspec(dllexport) __type
+#define PR_IMPLEMENT_DATA(__type) __declspec(dllexport) __type
 
 #define PR_CALLBACK
 #define PR_CALLBACK_DECL
@@ -90,15 +82,15 @@
 
 #elif defined(XP_OS2) && defined(__declspec)
 
-#define PR_EXPORT(__type) extern PR_DECL_EXPORT __type
-#define PR_EXPORT_DATA(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPORT(__type) extern PR_DECL_IMPORT __type
-#define PR_IMPORT_DATA(__type) extern PR_DECL_IMPORT __type
+#define PR_EXPORT(__type) extern __declspec(dllexport) __type
+#define PR_EXPORT_DATA(__type) extern __declspec(dllexport) __type
+#define PR_IMPORT(__type) extern  __declspec(dllimport) __type
+#define PR_IMPORT_DATA(__type) extern __declspec(dllimport) __type
 
-#define PR_EXTERN(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPLEMENT(__type) PR_DECL_EXPORT __type
-#define PR_EXTERN_DATA(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPLEMENT_DATA(__type) PR_DECL_EXPORT __type
+#define PR_EXTERN(__type) extern __declspec(dllexport) __type
+#define PR_IMPLEMENT(__type) __declspec(dllexport) __type
+#define PR_EXTERN_DATA(__type) extern __declspec(dllexport) __type
+#define PR_IMPLEMENT_DATA(__type) __declspec(dllexport) __type
 
 #define PR_CALLBACK
 #define PR_CALLBACK_DECL
@@ -106,14 +98,14 @@
 
 #elif defined(SYMBIAN)
 
-#define PR_EXPORT(__type) extern PR_DECL_EXPORT __type
-#define PR_EXPORT_DATA(__type) extern PR_DECL_EXPORT __type
+#define PR_EXPORT(__type) extern __declspec(dllexport) __type
+#define PR_EXPORT_DATA(__type) extern __declspec(dllexport) __type
 #ifdef __WINS__
-#define PR_IMPORT(__type) extern PR_DECL_EXPORT __type
-#define PR_IMPORT_DATA(__type) extern PR_DECL_EXPORT __type
+#define PR_IMPORT(__type) extern __declspec(dllexport) __type
+#define PR_IMPORT_DATA(__type) extern __declspec(dllexport) __type
 #else
-#define PR_IMPORT(__type) extern PR_DECL_IMPORT __type
-#define PR_IMPORT_DATA(__type) extern PR_DECL_IMPORT __type
+#define PR_IMPORT(__type) extern __declspec(dllimport) __type
+#define PR_IMPORT_DATA(__type) extern __declspec(dllimport) __type
 #endif
 
 #define PR_EXTERN(__type) extern __type
