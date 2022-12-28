@@ -13,6 +13,8 @@
 #include <windows.h>
 #include <primpl.h>
 
+#if !defined(_NSPR_STATIC_)
+
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD fdwReason,
@@ -37,3 +39,5 @@ PRThread *me;
     }
     return TRUE;
 }
+
+#endif
