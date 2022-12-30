@@ -11,6 +11,7 @@ option(MOZJS_THREADSAFE "Build SpiderMonkey with thread-safety" ON)
 option(MOZJS_ENABLE_ION "Build SpiderMonkey with method-jit" OFF)
 option(MOZJS_STATIC_LIB "Build SpiderMonkey as a static library" OFF)
 option(MOZJS_STATIC_RTL "Link msvc runtime libraries statically" OFF)
+option(MOZJS_ESR_VER "Mozilla ESR version" "esr31")
 
 #####################################################################
 ## MOZILLA_SOURCE must be set to the path of mozilla-unified source
@@ -39,20 +40,32 @@ else()
   set(TARGET_CPU "x86")
 endif()
 
+if(MOZJS_STATIC_RTL)
+  # Set runtime linking to /MT
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+  message(STATUS "Link against static runtime")
+endif()
+
+# Add the ESR version to directories so we don't override when doing multiple ESR builds
+set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/${MOZJS_ESR_VER})
 if(MOZJS_STATIC_LIB)
   set(LIBRARY_TYPE)
   set(LIBRARY_DIR lib)
   message(STATUS "Building static libraries")
-  message(STATUS "Install directory ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR}")
+  message(STATUS "Library install directory ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR}")
 else()
   set(LIBRARY_TYPE SHARED)
   set(LIBRARY_DIR bin)
   message(STATUS "Building dynamic libraries")
-  message(STATUS "Install directory ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR}")
+  message(STATUS "Library install directory ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR}")
 endif()
 
+set(MOZJS_EXPORT_PREFIX "${CMAKE_BINARY_DIR}/${MOZJS_ESR_VER}/include")
+message(STATUS "Exporting public headers to ${MOZJS_EXPORT_PREFIX}")
+
 if(MOZJS_THREADSAFE)
-  set(JS_THREADSAFE ON)
+  #set(JS_THREADSAFE ON)
+  add_definitions(-DJS_THREADSAFE)
   message(STATUS "Building with thread-safety")
 endif()
 
@@ -62,11 +75,11 @@ add_definitions(-DMOZILLA_VERSION="0.0")
 #####################################################################
 ## example (Executable)
 #####################################################################
-add_subdirectory(example)
+#add_subdirectory(example)
 
 #####################################################################
 ## Choosing version
 ## TODO: Support more ESR versions, goal is all available as boomarks
 ## in the Mercurial repository
-add_subdirectory(esr24)
+add_subdirectory(${MOZJS_ESR_VER})
 

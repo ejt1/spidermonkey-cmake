@@ -1,69 +1,103 @@
-# BUG: JSGC_INCREMENTAL must be defined because it is used without checking if defined in jsgc.cpp#4511
-add_definitions(-DJSGC_INCREMENTAL)
+# BUG: JSGC_INCREMENTAL must be defined because it is used without checking if defined in jsgc.cpp#4651
+set(JSGC_INCREMENTAL ON)
+
+if(CMAKE_BUILD_TYPE MATCHES "^(D|d)ebug$")
+  set(JS_DEBUG ON)
+
+  # BUG: ION is required for debug builds (for some fucking reason!)
+  set(MOZJS_ENABLE_ION ON)
+endif()
 
 #####################################################################
 ## SpiderMonkey (Library)
 #####################################################################
 set(JS_SOURCE_DIR ${MOZILLA_SOURCE}/js/src)
-# Listed in the same order as in js/src/moz.build
-# Early version of js did not provide full path to source files
 set(JS_SRCS
-  ${JS_SOURCE_DIR}/vm/ArgumentsObject.cpp
+  ${JS_SOURCE_DIR}/assembler/jit/ExecutableAllocator.cpp
+
+  ${JS_SOURCE_DIR}/builtin/Eval.cpp
+  ${JS_SOURCE_DIR}/builtin/Intl.cpp
+  ${JS_SOURCE_DIR}/builtin/MapObject.cpp
+  ${JS_SOURCE_DIR}/builtin/Object.cpp
+  ${JS_SOURCE_DIR}/builtin/Profilers.cpp
+  ${JS_SOURCE_DIR}/builtin/RegExp.cpp
+  ${JS_SOURCE_DIR}/builtin/SIMD.cpp
+  ${JS_SOURCE_DIR}/builtin/TestingFunctions.cpp
+  ${JS_SOURCE_DIR}/builtin/TypedObject.cpp
+  
+  ${JS_SOURCE_DIR}/devtools/sharkctl.cpp
+  
+  ${JS_SOURCE_DIR}/ds/LifoAlloc.cpp
+  
   ${JS_SOURCE_DIR}/frontend/BytecodeCompiler.cpp
   ${JS_SOURCE_DIR}/frontend/BytecodeEmitter.cpp
-  ${JS_SOURCE_DIR}/vm/CharacterEncoding.cpp
-  ${JS_SOURCE_DIR}/vm/DateTime.cpp
-  ${JS_SOURCE_DIR}/vm/Debugger.cpp
-  ${JS_SOURCE_DIR}/builtin/Eval.cpp
-  ${JS_SOURCE_DIR}/assembler/jit/ExecutableAllocator.cpp
   ${JS_SOURCE_DIR}/frontend/FoldConstants.cpp
-  ${JS_SOURCE_DIR}/vm/ForkJoin.cpp
-  ${JS_SOURCE_DIR}/vm/GlobalObject.cpp
-  ${JS_SOURCE_DIR}/vm/Interpreter.cpp
-  ${JS_SOURCE_DIR}/builtin/Intl.cpp
-  ${JS_SOURCE_DIR}/gc/Iteration.cpp
-  ${JS_SOURCE_DIR}/ds/LifoAlloc.cpp
-  ${JS_SOURCE_DIR}/builtin/MapObject.cpp
-  ${JS_SOURCE_DIR}/gc/Marking.cpp
-  ${JS_SOURCE_DIR}/gc/Memory.cpp
-  ${JS_SOURCE_DIR}/builtin/Module.cpp
-  ${JS_SOURCE_DIR}/vm/Monitor.cpp
   ${JS_SOURCE_DIR}/frontend/NameFunctions.cpp
-  ${JS_SOURCE_DIR}/gc/Nursery.cpp
-  ${JS_SOURCE_DIR}/builtin/Object.cpp
-  ${JS_SOURCE_DIR}/vm/ObjectImpl.cpp
-  ${JS_SOURCE_DIR}/yarr/PageBlock.cpp
-  ${JS_SOURCE_DIR}/builtin/ParallelArray.cpp
   ${JS_SOURCE_DIR}/frontend/ParseMaps.cpp
   ${JS_SOURCE_DIR}/frontend/ParseNode.cpp
   ${JS_SOURCE_DIR}/frontend/Parser.cpp
+  ${JS_SOURCE_DIR}/frontend/TokenStream.cpp
+  
+  ${JS_SOURCE_DIR}/gc/Barrier.cpp
+  ${JS_SOURCE_DIR}/gc/Iteration.cpp
+  ${JS_SOURCE_DIR}/gc/Marking.cpp
+  ${JS_SOURCE_DIR}/gc/Memory.cpp
+  ${JS_SOURCE_DIR}/gc/Nursery.cpp
+  ${JS_SOURCE_DIR}/gc/RootMarking.cpp
+  ${JS_SOURCE_DIR}/gc/Statistics.cpp
+  ${JS_SOURCE_DIR}/gc/StoreBuffer.cpp
+  ${JS_SOURCE_DIR}/gc/Tracer.cpp
+  ${JS_SOURCE_DIR}/gc/Verifier.cpp
+  ${JS_SOURCE_DIR}/gc/Zone.cpp
+  
+  ${JS_SOURCE_DIR}/vm/ArgumentsObject.cpp
+  ${JS_SOURCE_DIR}/vm/ArrayBufferObject.cpp
+  ${JS_SOURCE_DIR}/vm/CallNonGenericMethod.cpp
+  ${JS_SOURCE_DIR}/vm/CharacterEncoding.cpp
+  ${JS_SOURCE_DIR}/vm/Compression.cpp
+  ${JS_SOURCE_DIR}/vm/DateTime.cpp
+  ${JS_SOURCE_DIR}/vm/Debugger.cpp
+  ${JS_SOURCE_DIR}/vm/DebuggerMemory.cpp
+  ${JS_SOURCE_DIR}/vm/ErrorObject.cpp
+  ${JS_SOURCE_DIR}/vm/ForkJoin.cpp
+  ${JS_SOURCE_DIR}/vm/GlobalObject.cpp
+  ${JS_SOURCE_DIR}/vm/Id.cpp
+  ${JS_SOURCE_DIR}/vm/Interpreter.cpp
+  ${JS_SOURCE_DIR}/vm/MemoryMetrics.cpp
+  ${JS_SOURCE_DIR}/vm/Monitor.cpp
+  ${JS_SOURCE_DIR}/vm/ObjectImpl.cpp
+  ${JS_SOURCE_DIR}/vm/OldDebugAPI.cpp
+  ${JS_SOURCE_DIR}/vm/PIC.cpp
   ${JS_SOURCE_DIR}/vm/Probes.cpp
-  ${JS_SOURCE_DIR}/builtin/Profilers.cpp
   ${JS_SOURCE_DIR}/vm/PropertyKey.cpp
-  ${JS_SOURCE_DIR}/builtin/RegExp.cpp
+  ${JS_SOURCE_DIR}/vm/ProxyObject.cpp
   ${JS_SOURCE_DIR}/vm/RegExpObject.cpp
   ${JS_SOURCE_DIR}/vm/RegExpStatics.cpp
-  ${JS_SOURCE_DIR}/gc/RootMarking.cpp
-  ${JS_SOURCE_DIR}/vm/SPSProfiler.cpp
+  ${JS_SOURCE_DIR}/vm/Runtime.cpp
+  ${JS_SOURCE_DIR}/vm/SavedStacks.cpp
   ${JS_SOURCE_DIR}/vm/ScopeObject.cpp
   ${JS_SOURCE_DIR}/vm/SelfHosting.cpp
   ${JS_SOURCE_DIR}/vm/Shape.cpp
+  ${JS_SOURCE_DIR}/vm/SharedArrayObject.cpp
+  ${JS_SOURCE_DIR}/vm/SPSProfiler.cpp
   ${JS_SOURCE_DIR}/vm/Stack.cpp
-  ${JS_SOURCE_DIR}/gc/Statistics.cpp
-  ${JS_SOURCE_DIR}/gc/StoreBuffer.cpp
   ${JS_SOURCE_DIR}/vm/String.cpp
   ${JS_SOURCE_DIR}/vm/StringBuffer.cpp
-  ${JS_SOURCE_DIR}/builtin/TestingFunctions.cpp
+  ${JS_SOURCE_DIR}/vm/StructuredClone.cpp
   ${JS_SOURCE_DIR}/vm/ThreadPool.cpp
-  ${JS_SOURCE_DIR}/frontend/TokenStream.cpp
+  ${JS_SOURCE_DIR}/vm/TypedArrayObject.cpp
   ${JS_SOURCE_DIR}/vm/Unicode.cpp
-  ${JS_SOURCE_DIR}/gc/Verifier.cpp
+  ${JS_SOURCE_DIR}/vm/Value.cpp
+  ${JS_SOURCE_DIR}/vm/WeakMapPtr.cpp
   ${JS_SOURCE_DIR}/vm/Xdr.cpp
+
+  ${JS_SOURCE_DIR}/yarr/PageBlock.cpp
   ${JS_SOURCE_DIR}/yarr/YarrCanonicalizeUCS2.cpp
   ${JS_SOURCE_DIR}/yarr/YarrInterpreter.cpp
   ${JS_SOURCE_DIR}/yarr/YarrPattern.cpp
   ${JS_SOURCE_DIR}/yarr/YarrSyntaxChecker.cpp
-  ${JS_SOURCE_DIR}/gc/Zone.cpp
+
+  ${JS_SOURCE_DIR}/perf/jsperf.cpp
   
   ${JS_SOURCE_DIR}/jsalloc.cpp
   ${JS_SOURCE_DIR}/jsanalyze.cpp
@@ -71,12 +105,10 @@ set(JS_SRCS
   ${JS_SOURCE_DIR}/jsarray.cpp
   ${JS_SOURCE_DIR}/jsatom.cpp
   ${JS_SOURCE_DIR}/jsbool.cpp
-  ${JS_SOURCE_DIR}/jsclone.cpp
   ${JS_SOURCE_DIR}/jscntxt.cpp
   ${JS_SOURCE_DIR}/jscompartment.cpp
   ${JS_SOURCE_DIR}/jscrashreport.cpp
   ${JS_SOURCE_DIR}/jsdate.cpp
-  ${JS_SOURCE_DIR}/jsdbgapi.cpp
   ${JS_SOURCE_DIR}/jsdtoa.cpp
   ${JS_SOURCE_DIR}/jsexn.cpp
   ${JS_SOURCE_DIR}/jsfriendapi.cpp
@@ -85,28 +117,24 @@ set(JS_SRCS
   ${JS_SOURCE_DIR}/jsinfer.cpp
   ${JS_SOURCE_DIR}/jsiter.cpp
   ${JS_SOURCE_DIR}/jsmath.cpp
-  ${JS_SOURCE_DIR}/jsmemorymetrics.cpp
   ${JS_SOURCE_DIR}/jsnativestack.cpp
   ${JS_SOURCE_DIR}/jsnum.cpp
   ${JS_SOURCE_DIR}/jsobj.cpp
   ${JS_SOURCE_DIR}/json.cpp
   ${JS_SOURCE_DIR}/jsonparser.cpp
   ${JS_SOURCE_DIR}/jsopcode.cpp
-  ${JS_SOURCE_DIR}/perf/jsperf.cpp
   ${JS_SOURCE_DIR}/jsprf.cpp
   ${JS_SOURCE_DIR}/jspropertytree.cpp
   ${JS_SOURCE_DIR}/jsproxy.cpp
   ${JS_SOURCE_DIR}/jsreflect.cpp
   ${JS_SOURCE_DIR}/jsscript.cpp
   ${JS_SOURCE_DIR}/jsstr.cpp
-  ${JS_SOURCE_DIR}/jstypedarray.cpp
   ${JS_SOURCE_DIR}/jsutil.cpp
   ${JS_SOURCE_DIR}/jswatchpoint.cpp
   ${JS_SOURCE_DIR}/jsweakmap.cpp
   ${JS_SOURCE_DIR}/jsworkers.cpp
   ${JS_SOURCE_DIR}/jswrapper.cpp
-  ${JS_SOURCE_DIR}/prmjtime.cpp
-  ${JS_SOURCE_DIR}/devtools/sharkctl.cpp)
+  ${JS_SOURCE_DIR}/prmjtime.cpp)
 
 if(MOZ_INSTRUMENTS)
   list(APPEND JS_SRCS
@@ -120,15 +148,20 @@ endif()
 
 if(MOZJS_ENABLE_ION)
   list(APPEND JS_SRCS
+    ${JS_SOURCE_DIR}/jit/shared/BaselineCompiler-shared.cpp
+    ${JS_SOURCE_DIR}/jit/shared/CodeGenerator-shared.cpp
+    ${JS_SOURCE_DIR}/jit/shared/Lowering-shared.cpp
+
     ${JS_SOURCE_DIR}/jit/AliasAnalysis.cpp
     ${JS_SOURCE_DIR}/jit/AsmJS.cpp
     ${JS_SOURCE_DIR}/jit/AsmJSLink.cpp
+    ${JS_SOURCE_DIR}/jit/AsmJSModule.cpp
     ${JS_SOURCE_DIR}/jit/ASMJSSignalHandlers.cpp
-    ${JS_SOURCE_DIR}/jit/BacktracingAllocator.cpp
+    ${JS_SOURCE_DIR}/jit/BacktrackingAllocator.cpp
     ${JS_SOURCE_DIR}/jit/Bailouts.cpp
     ${JS_SOURCE_DIR}/jit/BaselineBailouts.cpp
-    ${JS_SOURCE_DIR}/jit/shared/BaselineCompiler-shared.cpp
     ${JS_SOURCE_DIR}/jit/BaselineCompiler.cpp
+    ${JS_SOURCE_DIR}/jit/BaselineDebugModeOSR.cpp
     ${JS_SOURCE_DIR}/jit/BaselineFrame.cpp
     ${JS_SOURCE_DIR}/jit/BaselineFrameInfo.cpp
     ${JS_SOURCE_DIR}/jit/BaselineIC.cpp
@@ -137,8 +170,8 @@ if(MOZJS_ENABLE_ION)
     ${JS_SOURCE_DIR}/jit/BitSet.cpp
     ${JS_SOURCE_DIR}/jit/BytecodeAnalysis.cpp
     ${JS_SOURCE_DIR}/jit/C1Spewer.cpp
-    ${JS_SOURCE_DIR}/jit/shared/CodeGenerator-shared.cpp
     ${JS_SOURCE_DIR}/jit/CodeGenerator.cpp
+    ${JS_SOURCE_DIR}/jit/CompileWrappers.cpp
     ${JS_SOURCE_DIR}/jit/EdgeCaseAnalysis.cpp
     ${JS_SOURCE_DIR}/jit/EffectiveAddressAnalysis.cpp
     ${JS_SOURCE_DIR}/jit/Ion.cpp
@@ -147,42 +180,48 @@ if(MOZJS_ENABLE_ION)
     ${JS_SOURCE_DIR}/jit/IonCaches.cpp
     ${JS_SOURCE_DIR}/jit/IonFrames.cpp
     ${JS_SOURCE_DIR}/jit/IonMacroAssembler.cpp
+    ${JS_SOURCE_DIR}/jit/IonOptimizationLevels.cpp
     ${JS_SOURCE_DIR}/jit/IonSpewer.cpp
+    ${JS_SOURCE_DIR}/jit/JitOptions.cpp
     ${JS_SOURCE_DIR}/jit/JSONSpewer.cpp
-    ${JS_SOURCE_DIR}/jit/PerfSpewer.cpp
     ${JS_SOURCE_DIR}/jit/LICM.cpp
-    ${JS_SOURCE_DIR}/jit/LIR.cpp
     ${JS_SOURCE_DIR}/jit/LinearScan.cpp
+    ${JS_SOURCE_DIR}/jit/LIR.cpp
     ${JS_SOURCE_DIR}/jit/LiveRangeAllocator.cpp
-    ${JS_SOURCE_DIR}/jit/shared/Lowering-shared.cpp
     ${JS_SOURCE_DIR}/jit/Lowering.cpp
     ${JS_SOURCE_DIR}/jit/MCallOptimize.cpp
     ${JS_SOURCE_DIR}/jit/MIR.cpp
     ${JS_SOURCE_DIR}/jit/MIRGraph.cpp
     ${JS_SOURCE_DIR}/jit/MoveResolver.cpp
-    ${JS_SOURCE_DIR}/jit/ParallelArrayAnalysis.cpp
     ${JS_SOURCE_DIR}/jit/ParallelFunctions.cpp
+    ${JS_SOURCE_DIR}/jit/ParallelSafetyAnalysis.cpp
+    ${JS_SOURCE_DIR}/jit/PerfSpewer.cpp
     ${JS_SOURCE_DIR}/jit/RangeAnalysis.cpp
+    ${JS_SOURCE_DIR}/jit/Recover.cpp
     ${JS_SOURCE_DIR}/jit/RegisterAllocator.cpp
+    ${JS_SOURCE_DIR}/jit/RematerializedFrame.cpp
     ${JS_SOURCE_DIR}/jit/Safepoints.cpp
     ${JS_SOURCE_DIR}/jit/Snapshots.cpp
     ${JS_SOURCE_DIR}/jit/StupidAllocator.cpp
+    ${JS_SOURCE_DIR}/jit/TypeDescrSet.cpp
     ${JS_SOURCE_DIR}/jit/TypePolicy.cpp
     ${JS_SOURCE_DIR}/jit/UnreachableCodeElimination.cpp
-    ${JS_SOURCE_DIR}/jit/VMFunctions.cpp
-    ${JS_SOURCE_DIR}/jit/ValueNumbering.cpp)
+    ${JS_SOURCE_DIR}/jit/ValueNumbering.cpp
+    ${JS_SOURCE_DIR}/jit/VMFunctions.cpp)
 
-  if(TARGET_CPU MATCHES "^86$")
+  if(TARGET_CPU MATCHES "^x86.+$")
+    message(STATUS "Build windows ION")
     list(APPEND JS_SRCS
       ${JS_SOURCE_DIR}/jit/shared/Assembler-x86-shared.cpp
       ${JS_SOURCE_DIR}/jit/shared/BaselineCompiler-x86-shared.cpp
       ${JS_SOURCE_DIR}/jit/shared/BaselineIC-x86-shared.cpp
       ${JS_SOURCE_DIR}/jit/shared/CodeGenerator-x86-shared.cpp
-      ${JS_SOURCE_DIR}/jit/shared/IonFrames-x86-shared.cpp
       ${JS_SOURCE_DIR}/jit/shared/Lowering-x86-shared.cpp
+      ${JS_SOURCE_DIR}/jit/shared/MacroAssembler-x86-shared.cpp
       ${JS_SOURCE_DIR}/jit/shared/MoveEmitter-x86-shared.cpp)
 
     if(TARGET_CPU MATCHES "^x86_64$")
+      message(STATUS "Build x64 ION")
       list(APPEND JS_SRCS
         ${JS_SOURCE_DIR}/jit/x64/Assembler-x64.cpp
         ${JS_SOURCE_DIR}/jit/x64/Bailouts-x64.cpp
@@ -193,6 +232,7 @@ if(MOZJS_ENABLE_ION)
         ${JS_SOURCE_DIR}/jit/x64/MacroAssembler-x64.cpp
         ${JS_SOURCE_DIR}/jit/x64/Trampoline-x64.cpp)
     else()
+    message(STATUS "Build x86 ION")
       list(APPEND JS_SRCS
         ${JS_SOURCE_DIR}/jit/x86/Assembler-x86.cpp
         ${JS_SOURCE_DIR}/jit/x86/Bailouts-x86.cpp
@@ -213,8 +253,6 @@ list(APPEND JS_SRCS
 
 if(MOZJS_ENABLE_ION OR MOZJS_ENABLE_YARR_JIT)
   list(APPEND JS_SRCS
-    ${JS_SOURCE_DIR}/assembler/assembler/ASMAssembler.cpp
-    ${JS_SOURCE_DIR}/assembler/assembler/MacroAssemblerASM.cpp
     ${JS_SOURCE_DIR}/assembler/assembler/MacroAssemblerX86Common.cpp)
 endif()
 
@@ -229,6 +267,11 @@ if(MOZJS_HAS_CTYPES)
     ${JS_SOURCE_DIR}/ctypes/Library.cpp)
 endif()
 
+if(MOZJS_ENABLE_VTUNE)
+  list(APPEND JS_SRCS
+    ${JS_SOURCE_DIR}/vtune/jitprofiling.cpp)
+endif()
+
 list(APPEND JS_SRCS
   ${JS_SOURCE_DIR}/perf/pm_stub.cpp)
 ## End source files
@@ -240,20 +283,30 @@ add_library(mozjs::js ALIAS js)
 set(JS_PUBLIC_HDRS
   ${JS_SOURCE_DIR}/../public/Anchor.h
   ${JS_SOURCE_DIR}/../public/CallArgs.h
+  ${JS_SOURCE_DIR}/../public/CallNonGenericMethod.h
   ${JS_SOURCE_DIR}/../public/CharacterEncoding.h
+  ${JS_SOURCE_DIR}/../public/Class.h
   ${JS_SOURCE_DIR}/../public/Date.h
   ${JS_SOURCE_DIR}/../public/GCAPI.h
   ${JS_SOURCE_DIR}/../public/HashTable.h
   ${JS_SOURCE_DIR}/../public/HeapAPI.h
+  ${JS_SOURCE_DIR}/../public/Id.h
   ${JS_SOURCE_DIR}/../public/LegacyIntTypes.h
   ${JS_SOURCE_DIR}/../public/MemoryMetrics.h
+  ${JS_SOURCE_DIR}/../public/OldDebugAPI.h
+  ${JS_SOURCE_DIR}/../public/Principals.h
+  ${JS_SOURCE_DIR}/../public/ProfilingStack.h
   ${JS_SOURCE_DIR}/../public/PropertyKey.h
   ${JS_SOURCE_DIR}/../public/RequiredDefines.h
   ${JS_SOURCE_DIR}/../public/RootingAPI.h
-  ${JS_SOURCE_DIR}/../public/TemplateLib.h
+  ${JS_SOURCE_DIR}/../public/SliceBudget.h
+  ${JS_SOURCE_DIR}/../public/StructuredClone.h
+  ${JS_SOURCE_DIR}/../public/TracingAPI.h
+  ${JS_SOURCE_DIR}/../public/TypeDecls.h
   ${JS_SOURCE_DIR}/../public/Utility.h
   ${JS_SOURCE_DIR}/../public/Value.h
-  ${JS_SOURCE_DIR}/../public/Vector.h)
+  ${JS_SOURCE_DIR}/../public/Vector.h
+  ${JS_SOURCE_DIR}/../public/WeakMapPtr.h)
 
 foreach(_header ${JS_PUBLIC_HDRS})
   get_filename_component(_header_file ${_header} NAME)
@@ -264,20 +317,16 @@ set(JS_EXPORT_HDRS
   ${JS_SOURCE_DIR}/js.msg
   ${JS_SOURCE_DIR}/jsalloc.h
   ${JS_SOURCE_DIR}/jsapi.h
-  ${JS_SOURCE_DIR}/jsclass.h
+  ${JS_SOURCE_DIR}/jsbytecode.h
   ${JS_SOURCE_DIR}/jsclist.h
   ${JS_SOURCE_DIR}/jscpucfg.h
-  ${JS_SOURCE_DIR}/jsdbgapi.h
   ${JS_SOURCE_DIR}/jsfriendapi.h
-  ${JS_SOURCE_DIR}/jslock.h
   ${JS_SOURCE_DIR}/perf/jsperf.h
   ${JS_SOURCE_DIR}/jsprf.h
   ${JS_SOURCE_DIR}/jsprototypes.h
   ${JS_SOURCE_DIR}/jsproxy.h
-  ${JS_SOURCE_DIR}/jsprvtd.h
   ${JS_SOURCE_DIR}/jspubtd.h
   ${JS_SOURCE_DIR}/jstypes.h
-  ${JS_SOURCE_DIR}/jsutil.h
   ${JS_SOURCE_DIR}/jsversion.h
   ${JS_SOURCE_DIR}/jswrapper.h)
 
@@ -285,8 +334,6 @@ foreach(_header ${JS_EXPORT_HDRS})
   get_filename_component(_header_file ${_header} NAME)
   configure_file(${_header} ${CMAKE_CURRENT_BINARY_DIR}/include/${_header_file} COPYONLY)
 endforeach()
-
-add_dependencies(js host_jsoplengen)
 
 target_include_directories(js
   PRIVATE
@@ -315,7 +362,28 @@ if(MOZJS_THREADSAFE)
   target_link_libraries(js PUBLIC mozjs::nspr winmm)
 endif()
 
-target_compile_definitions(js PUBLIC -DIMPL_MFBT)
+target_compile_definitions(js
+  PRIVATE
+    -DHAVE_LOG2
+    -DHAVE_LOG1P
+    -DHAVE_EXPM1
+    -DHAVE_ACOSH
+    -DHAVE_ATANH
+    -DHAVE_TRUNC
+    -DHAVE_CBRT
+    -D_CRT_RAND_S
+  PUBLIC
+    -DIMPL_MFBT)
+
+if(MOZJS_ENABLE_ION)
+  target_compile_definitions(js PUBLIC -DJS_ION)
+  if (TARGET_CPU MATCHES "^x86_64$")
+    target_compile_definitions(js PUBLIC -DJS_CODEGEN_X64 -DJS_PUNBOX64 -DJS_CPU_X64)
+  else()
+    target_compile_definitions(js PUBLIC -DJS_CODEGEN_X86 -DJS_NUNBOX32 -DJS_CPU_X86)
+  endif()
+endif()
+
 if(MOZJS_STATIC_LIB)
   target_compile_definitions(js PUBLIC -DSTATIC_JS_API)
 else()
@@ -338,27 +406,19 @@ add_custom_command(
 set_source_files_properties(jsautokw.h PROPERTIES GENERATED TRUE)
 target_sources(js PRIVATE jsautokw.h)
 
-add_executable(host_jsoplengen ${JS_SOURCE_DIR}/jsoplengen.cpp)
-
-add_custom_command(
-  OUTPUT jsautooplen.h
-  COMMAND host_jsoplengen jsautooplen.h
-  DEPENDS host_jsoplengen
-  COMMENT "Generating jsautooplen.h"
-  VERBATIM)
-
-set_source_files_properties(jsautooplen.h PROPERTIES GENERATED TRUE)
-target_sources(js PRIVATE jsautooplen.h)
-
 set(SELFHOSTING_SRCS
   ${JS_SOURCE_DIR}/builtin/Utilities.js
+  ${JS_SOURCE_DIR}/builtin/ParallelUtilities.js
   ${JS_SOURCE_DIR}/builtin/Array.js
   ${JS_SOURCE_DIR}/builtin/Date.js
   ${JS_SOURCE_DIR}/builtin/Intl.js
   ${JS_SOURCE_DIR}/builtin/IntlData.js
+  ${JS_SOURCE_DIR}/builtin/Iterator.js
+  ${JS_SOURCE_DIR}/builtin/Map.js
   ${JS_SOURCE_DIR}/builtin/Number.js
-  ${JS_SOURCE_DIR}/builtin/ParallelArray.js
-  ${JS_SOURCE_DIR}/builtin/String.js)
+  ${JS_SOURCE_DIR}/builtin/String.js
+  ${JS_SOURCE_DIR}/builtin/Set.js
+  ${JS_SOURCE_DIR}/builtin/TypedObject.js)
 
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/selfhosted.out.h
@@ -396,6 +456,8 @@ set(MFBT_SRCS
 
   ${MFBT_SOURCE_DIR}/decimal/Decimal.cpp
   
+  #${MFBT_SOURCE_DIR}/Compression.cpp
+  ${MFBT_SOURCE_DIR}/FloatingPoint.cpp
   ${MFBT_SOURCE_DIR}/HashFunctions.cpp
   ${MFBT_SOURCE_DIR}/Poison.cpp
   ${MFBT_SOURCE_DIR}/SHA1.cpp)
@@ -417,42 +479,64 @@ install(TARGETS mfbt
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR})
 
 set(MFBT_PUBLIC_HDRS
+  ${MFBT_SOURCE_DIR}/Alignment.h
+  ${MFBT_SOURCE_DIR}/AllocPolicy.h
+  ${MFBT_SOURCE_DIR}/Array.h
+  ${MFBT_SOURCE_DIR}/ArrayUtils.h
   ${MFBT_SOURCE_DIR}/Assertions.h
   ${MFBT_SOURCE_DIR}/Atomics.h
   ${MFBT_SOURCE_DIR}/Attributes.h
+  ${MFBT_SOURCE_DIR}/BinarySearch.h
   ${MFBT_SOURCE_DIR}/BloomFilter.h
   ${MFBT_SOURCE_DIR}/Casting.h
+  ${MFBT_SOURCE_DIR}/ChaosMode.h
   ${MFBT_SOURCE_DIR}/Char16.h
   ${MFBT_SOURCE_DIR}/CheckedInt.h
   ${MFBT_SOURCE_DIR}/Compiler.h
+  ${MFBT_SOURCE_DIR}/Compression.h
   ${MFBT_SOURCE_DIR}/Constants.h
   ${MFBT_SOURCE_DIR}/DebugOnly.h
   ${MFBT_SOURCE_DIR}/Endian.h
+  ${MFBT_SOURCE_DIR}/EnumeratedArray.h
   ${MFBT_SOURCE_DIR}/EnumSet.h
   ${MFBT_SOURCE_DIR}/FloatingPoint.h
   ${MFBT_SOURCE_DIR}/GuardObjects.h
   ${MFBT_SOURCE_DIR}/HashFunctions.h
+  ${MFBT_SOURCE_DIR}/IntegerPrintfMacros.h
+  ${MFBT_SOURCE_DIR}/IntegerTypeTraits.h
   ${MFBT_SOURCE_DIR}/Likely.h
   ${MFBT_SOURCE_DIR}/LinkedList.h
+  ${MFBT_SOURCE_DIR}/MacroArgs.h
+  ${MFBT_SOURCE_DIR}/MacroForEach.h
   ${MFBT_SOURCE_DIR}/MathAlgorithms.h
+  ${MFBT_SOURCE_DIR}/Maybe.h
   ${MFBT_SOURCE_DIR}/MemoryChecking.h
-  ${MFBT_SOURCE_DIR}/MSStdInt.h
+  ${MFBT_SOURCE_DIR}/MemoryReporting.h
+  ${MFBT_SOURCE_DIR}/Move.h
+  ${MFBT_SOURCE_DIR}/MSIntTypes.h
   ${MFBT_SOURCE_DIR}/NullPtr.h
+  ${MFBT_SOURCE_DIR}/NumericLimits.h
   ${MFBT_SOURCE_DIR}/PodOperations.h
   ${MFBT_SOURCE_DIR}/Poison.h
   ${MFBT_SOURCE_DIR}/Range.h
   ${MFBT_SOURCE_DIR}/RangedPtr.h
+  ${MFBT_SOURCE_DIR}/RefCountType.h
+  ${MFBT_SOURCE_DIR}/ReentrancyGuard.h
   ${MFBT_SOURCE_DIR}/RefPtr.h
+  ${MFBT_SOURCE_DIR}/RollingMean.h
   ${MFBT_SOURCE_DIR}/Scoped.h
   ${MFBT_SOURCE_DIR}/SHA1.h
   ${MFBT_SOURCE_DIR}/SplayTree.h
-  ${MFBT_SOURCE_DIR}/StandardInteger.h
+  ${MFBT_SOURCE_DIR}/TemplateLib.h
   ${MFBT_SOURCE_DIR}/ThreadLocal.h
   ${MFBT_SOURCE_DIR}/TypedEnum.h
+  ${MFBT_SOURCE_DIR}/TypedEnumBits.h
+  ${MFBT_SOURCE_DIR}/TypedEnumInternal.h
   ${MFBT_SOURCE_DIR}/Types.h
   ${MFBT_SOURCE_DIR}/TypeTraits.h
-  ${MFBT_SOURCE_DIR}/Util.h
-  ${MFBT_SOURCE_DIR}/WeakPtr.h)
+  ${MFBT_SOURCE_DIR}/Vector.h
+  ${MFBT_SOURCE_DIR}/WeakPtr.h
+  ${MFBT_SOURCE_DIR}/WindowsVersion.h)
 
 foreach(_header ${MFBT_PUBLIC_HDRS})
   get_filename_component(_header_file ${_header} NAME)

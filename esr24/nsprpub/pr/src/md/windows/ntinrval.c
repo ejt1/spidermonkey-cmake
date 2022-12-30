@@ -36,7 +36,7 @@ _PR_MD_GET_INTERVAL()
 #ifdef WINCE
     return (*intervalFunc)();
 #else
-    return timeGetTime();
+    return GetTickCount();
 #endif
 }
 

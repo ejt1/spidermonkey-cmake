@@ -11,8 +11,10 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl.exe",
         "CMAKE_CXX_COMPILER": "cl.exe",
-        "MOZILLA_SOURCE": "C:/mozilla-source/mozilla-unified",
-        "MOZJS_STATIC_LIB": "True"
+        "MOZILLA_SOURCE": "C:/mozilla-git",
+        "MOZJS_ESR_VER": "esr24",
+        "MOZJS_STATIC_LIB": "True",
+        "MOZJS_STATIC_RTL": "True"
       },
       "condition": {
         "type": "equals",
