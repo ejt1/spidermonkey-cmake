@@ -1,5 +1,10 @@
 add_subdirectory(shell)
 
+set(JS_GC_ZEAL ON)
+set(MOZJS_ENABLE_ION ON)
+set(JS_METHODJIT ON)
+add_definitions(-DJS_ION)
+
 #####################################################################
 ## SpiderMonkey (Library)
 #####################################################################
@@ -130,7 +135,7 @@ if(MOZJS_ENABLE_ION)
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/AsmJS.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/AsmJSLink.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/ASMJSSignalHandlers.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/BacktracingAllocator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/BacktrackingAllocator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/Bailouts.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/BaselineBailouts.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/BaselineCompiler-shared.cpp
@@ -178,37 +183,35 @@ if(MOZJS_ENABLE_ION)
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/VMFunctions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/ValueNumbering.cpp)
 
-  if(TARGET_CPU MATCHES "^86$")
-    list(APPEND JS_SRCS
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/Assembler-x86-shared.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/BaselineCompiler-x86-shared.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/BaselineIC-x86-shared.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/CodeGenerator-x86-shared.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/IonFrames-x86-shared.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/Lowering-x86-shared.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/MoveEmitter-x86-shared.cpp)
+  list(APPEND JS_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/Assembler-x86-shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/BaselineCompiler-x86-shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/BaselineIC-x86-shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/CodeGenerator-x86-shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/IonFrames-x86-shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/Lowering-x86-shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/shared/MoveEmitter-x86-shared.cpp)
 
-    if(TARGET_CPU MATCHES "^x86_64$")
-      list(APPEND JS_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Assembler-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Bailouts-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/BaselineCompiler-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/BaselineIC-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/CodeGenerator-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Lowering-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/MacroAssembler-x64.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Trampoline-x64.cpp)
-    else()
-      list(APPEND JS_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Assembler-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Bailouts-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/BaselineCompiler-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/BaselineIC-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/CodeGenerator-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Lowering-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/MacroAssembler-x86.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Trampoline-x86.cpp)
-    endif()
+  if(TARGET_CPU MATCHES "x86_64")
+    list(APPEND JS_SRCS
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Assembler-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Bailouts-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/BaselineCompiler-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/BaselineIC-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/CodeGenerator-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Lowering-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/MacroAssembler-x64.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x64/Trampoline-x64.cpp)
+  else()
+    list(APPEND JS_SRCS
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Assembler-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Bailouts-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/BaselineCompiler-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/BaselineIC-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/CodeGenerator-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Lowering-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/MacroAssembler-x86.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/jit/x86/Trampoline-x86.cpp)
   endif()
 endif()
 
@@ -219,20 +222,14 @@ list(APPEND JS_SRCS
 
 if(MOZJS_ENABLE_ION OR MOZJS_ENABLE_YARR_JIT)
   list(APPEND JS_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/assembler/assembler/ASMAssembler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/assembler/assembler/MacroAssemblerASM.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/assembler/assembler/ARMAssembler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/assembler/assembler/MacroAssemblerARM.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/assembler/assembler/MacroAssemblerX86Common.cpp)
 endif()
 
 if(MOZJS_ENABLE_YARR_JIT)
   list(APPEND JS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/yarr/YarrJIT.cpp)
-endif()
-
-if(MOZJS_HAS_CTYPES)
-  list(APPEND JS_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/ctypes/CTypes.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/ctypes/Library.cpp)
 endif()
 
 list(APPEND JS_SRCS
@@ -317,12 +314,27 @@ target_include_directories(js
     ${CMAKE_CURRENT_BINARY_DIR}
     ${MOZJS_EXPORT_PREFIX})
 
-target_link_libraries(js PRIVATE mozjs::intl PUBLIC mozjs::mfbt)
-if(MOZJS_THREADSAFE)
-  target_link_libraries(js PUBLIC mozjs::nspr)
-endif()
+target_link_libraries(js
+  PRIVATE
+    mozjs::intl
+  PUBLIC
+    mozjs::mfbt)
 
 target_compile_definitions(js PUBLIC -DIMPL_MFBT)
+
+if(MOZJS_THREADSAFE)
+  target_link_libraries(js PUBLIC mozjs::nspr)
+  target_compile_definitions(js PUBLIC JS_THREADSAFE)
+endif()
+
+if(MOZJS_ENABLE_ION)
+  if(TARGET_CPU MATCHES "x86_64")
+    target_compile_definitions(js PUBLIC JS_CPU_X64 JS_CODEGEN_X64 JS_PUNBOX64)
+  else()
+    target_compile_definitions(js PUBLIC JS_CPU_X86 JS_CODEGEN_X86 JS_NUNBOX32)
+  endif()
+endif()
+
 if(MOZJS_STATIC_LIB)
   target_compile_definitions(js PUBLIC -DSTATIC_JS_API)
 else()
@@ -385,5 +397,3 @@ target_sources(js PRIVATE selfhosted.out.h)
 ## Begin install directives
 install(TARGETS js
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR})
-install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include"
-  DESTINATION ${CMAKE_INSTALL_PREFIX})

@@ -22,6 +22,7 @@ add_library(mozjs::mfbt ALIAS mfbt)
 
 target_include_directories(mfbt
   PRIVATE
+    ${MOZJS_EXPORT_PREFIX}
     ${CMAKE_CURRENT_SOURCE_DIR}/decimal
     ${CMAKE_CURRENT_SOURCE_DIR}
   PUBLIC
@@ -80,6 +81,3 @@ configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/decimal/Decimal.h
   ${MOZJS_EXPORT_PREFIX}/mozilla/decimal/Decimal.h
   COPYONLY)
-
-install(FILES ${MFBT_PUBLIC_HDRS}
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/mozilla)

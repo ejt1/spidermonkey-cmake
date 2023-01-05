@@ -44,6 +44,7 @@
 #include "builtin/TestingFunctions.h"
 #include "frontend/BytecodeEmitter.h"
 #include "frontend/Parser.h"
+#include "assembler/assembler/MacroAssembler.h"
 #include "vm/Shape.h"
 
 #include "prmjtime.h"

@@ -5,3 +5,5 @@ add_subdirectory(intl)
 add_subdirectory(js)
 add_subdirectory(mfbt)
 add_subdirectory(nsprpub)
+
+install(DIRECTORY ${MOZJS_EXPORT_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX})
