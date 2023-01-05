@@ -8,6 +8,8 @@ project(mozjs)
 include("cmake/options.cmake")
 include("cmake/configure.cmake")
 
+message(STATUS "${MOZJS_TOP_DIR}")
+
 #####################################################################
 ## example (Executable)
 #####################################################################

@@ -58,3 +58,5 @@ endif()
 
 set(MOZJS_EXPORT_PREFIX "${CMAKE_BINARY_DIR}/${MOZJS_ESR_VER}/include")
 message(STATUS "Exporting public headers to ${MOZJS_EXPORT_PREFIX}")
+
+set(MOZJS_TOP_DIR ${CMAKE_CURRENT_SOURCE_DIR})
