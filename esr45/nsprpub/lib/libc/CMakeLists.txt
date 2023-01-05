@@ -28,7 +28,7 @@ target_include_directories(libc
 target_link_libraries(libc PRIVATE mozjs::nspr)
 
 configure_file(${CMAKE_SOURCE_DIR}/_pl_bld.h ${CMAKE_CURRENT_BINARY_DIR}/_pl_bld.h COPYONLY)
-target_sources(libc PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/_pl_bld.h)
+target_sources(libc PUBLIC ${MOZJS_TOP_DIR}/_pl_bld.h)
 
 install(TARGETS libc
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR})

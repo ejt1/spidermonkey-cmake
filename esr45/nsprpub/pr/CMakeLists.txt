@@ -117,7 +117,7 @@ endif()
 #target_compile_options(nspr PRIVATE /W0)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/md/_win95.cfg ${CMAKE_CURRENT_BINARY_DIR}/prcpucfg.h COPYONLY)
-target_sources(nspr PUBLIC ${MOZJS_TOP_DIR}/prcpucfg.h)
+target_sources(nspr PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/prcpucfg.h)
 
 install(TARGETS nspr
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBRARY_DIR})
