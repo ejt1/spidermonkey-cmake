@@ -86,9 +86,6 @@ set(NSPR_SRCS
 add_library(nspr ${LIBRARY_TYPE} ${NSPR_SRCS})
 add_library(mozjs::nspr ALIAS nspr)
 
-# Disable warnings because we're not gonna do anything about them anyway :)
-target_compile_options(nspr PRIVATE /W0)
-
 target_include_directories(nspr PUBLIC
   "${CMAKE_CURRENT_BINARY_DIR}"
   "${CMAKE_CURRENT_SOURCE_DIR}/include/md"
@@ -113,8 +110,6 @@ if(TARGET_CPU MATCHES "^x86_64$")
     -DUSE_64)
   message(STATUS "Build NSPR as 64-bit")
 endif()
-
-#target_compile_options(nspr PRIVATE /W0)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/md/_win95.cfg ${CMAKE_CURRENT_BINARY_DIR}/prcpucfg.h COPYONLY)
 target_sources(nspr PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/prcpucfg.h)

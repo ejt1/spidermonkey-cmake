@@ -13194,7 +13194,9 @@ public:
     INSTRUCTION_HEADER(GuardSharedTypedArray)
 
     static MGuardSharedTypedArray* New(TempAllocator& alloc, MDefinition* obj) {
+#pragma warning(disable: 4291)
         return new(alloc) MGuardSharedTypedArray(obj);
+#pragma warning(default: 4291)
     }
     MDefinition* obj() const {
         return getOperand(0);

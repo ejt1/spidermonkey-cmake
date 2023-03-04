@@ -316,9 +316,6 @@ list(APPEND JS_SRCS
 add_library(js ${LIBRARY_TYPE} ${JS_SRCS})
 add_library(mozjs::js ALIAS js)
 
-# Disable warnings because we're not gonna do anything about them anyway :)
-target_compile_options(js PRIVATE /W0)
-
 set(JS_PUBLIC_HDRS
   "${CMAKE_CURRENT_SOURCE_DIR}/public/CallArgs.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/public/CallNonGenericMethod.h"
@@ -422,11 +419,9 @@ endif()
 
 target_compile_definitions(js PUBLIC
   -DIMPL_MFBT
-  -DMOZ_CHAR16_IS_NOT_WCHAR
   -D_CRT_RAND_S
   -DHAVE_LOG2)
 if(MOZJS_STATIC_LIB)
-  message(STATUS "-DSTATIC_JS_API")
   target_compile_definitions(js PUBLIC -DSTATIC_JS_API)
 else()
   target_compile_definitions(js PRIVATE -DEXPORT_JS_API)
