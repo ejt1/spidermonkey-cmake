@@ -4,13 +4,13 @@ Compiling SpiderMonkey for projects targeting MSVC is hard, this makes it a litt
 
 Only supports compiling on Windows targeting MSVC, anything else is covered by the original source.
 
-
-
 # Versions
 
 - esr24
 - esr31 not working!
 - esr38
+- esr45
+- esr52
 
 # Requirements
 

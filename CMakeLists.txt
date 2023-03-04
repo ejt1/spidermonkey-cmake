@@ -8,13 +8,6 @@ project(mozjs)
 include("cmake/options.cmake")
 include("cmake/configure.cmake")
 
-message(STATUS "${MOZJS_TOP_DIR}")
-
-#####################################################################
-## example (Executable)
-#####################################################################
-#add_subdirectory(example)
-
 #####################################################################
 ## Choosing version
 ## TODO: Support more ESR versions, goal is all available as boomarks

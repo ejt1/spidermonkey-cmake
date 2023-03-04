@@ -32,6 +32,10 @@ if(MOZJS_ENABLE_ION)
   message(STATUS "Building SpiderMonkey with method-jit ON")
 endif()
 
+if(MOZJS_SM_PROMISE)
+  message(STATUS "Building SpiderMonkey with Promise ON")
+endif()
+
 # option MOZJS_STATIC_RTL
 if(MOZJS_STATIC_RTL)
   # Set runtime linking to /MT
