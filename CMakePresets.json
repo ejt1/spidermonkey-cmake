@@ -12,7 +12,7 @@
         "CMAKE_C_COMPILER": "cl.exe",
         "CMAKE_CXX_COMPILER": "cl.exe",
         "MOZJS_ENABLE_ION": "True",
-        "MOZJS_ESR_VER": "esr52",
+        "MOZJS_ESR_VER": "esr60",
         "MOZJS_STATIC_LIB": "True",
         "MOZJS_STATIC_RTL": "True"
       },
