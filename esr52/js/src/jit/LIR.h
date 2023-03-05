@@ -1434,7 +1434,7 @@ class LSafepoint : public TempObject
 #ifdef JS_NUNBOX32
     // List of registers (in liveRegs) and slots which contain pieces of Values.
     NunboxList nunboxParts_;
-#elif JS_PUNBOX64
+#elif defined(JS_PUNBOX64)
     // The subset of liveRegs which have Values.
     LiveGeneralRegisterSet valueRegs_;
 #endif
@@ -1645,7 +1645,7 @@ class LSafepoint : public TempObject
         return nunboxParts_;
     }
 
-#elif JS_PUNBOX64
+#elif defined(JS_PUNBOX64)
 
     void addValueRegister(Register reg) {
         valueRegs_.add(reg);

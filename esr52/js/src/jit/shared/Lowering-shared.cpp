@@ -221,7 +221,7 @@ LIRGeneratorShared::buildSnapshot(LInstruction* ins, MResumePoint* rp, BailoutKi
     return snapshot;
 }
 
-#elif JS_PUNBOX64
+#elif defined(JS_PUNBOX64)
 
 LSnapshot*
 LIRGeneratorShared::buildSnapshot(LInstruction* ins, MResumePoint* rp, BailoutKind kind)

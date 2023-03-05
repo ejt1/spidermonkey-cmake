@@ -529,7 +529,7 @@ CodeGeneratorShared::encodeAllocation(LSnapshot* snapshot, MDefinition* mir,
             else
                 alloc = RValueAllocation::Untyped(ToStackIndex(type), ToStackIndex(payload));
         }
-#elif JS_PUNBOX64
+#elif defined (JS_PUNBOX64)
         if (payload->isRegister())
             alloc = RValueAllocation::Untyped(ToRegister(payload));
         else

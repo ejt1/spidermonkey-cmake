@@ -15,6 +15,8 @@ target_include_directories(mozglue
   PUBLIC
     "${MOZJS_EXPORT_PREFIX}")
 
+target_link_libraries(mozglue PUBLIC dbghelp)
+
 target_compile_definitions(mozglue PUBLIC -DIMPL_MFBT -DMOZ_HAS_MOZGLUE)
 
 install(TARGETS mozglue
